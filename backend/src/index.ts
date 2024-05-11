@@ -9,6 +9,10 @@ const app = new Hono<{
   };
 }>();
 
+app.get("/", (c) => {
+  return c.text("Hello Hono!");
+});
+
 app.post("/api/v1/user/signup", async (c) => {
   const prisma = new PrismaClient({
     datasourceUrl: c.env?.DATABASE_URL,
@@ -28,13 +32,26 @@ app.post("/api/v1/user/signup", async (c) => {
     return c.status(403);
   }
 });
-app.get("/", (c) => {
-  return c.text("Hello Hono!");
+
+app.post("/api/v1/user/signin", async (c) => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env?.DATABASE_URL,
+  }).$extends(withAccelerate());
+  const body = await c.req.json();
+  const user = await prisma.user.findMany({
+    where: {
+      email: body.email,
+      password: body.password,
+    },
+  });
+  if (!user) {
+    c.status(403);
+    return c.json({ error: "user not found" });
+  }
+  const token = await sign({ id: user.id }, c.env.JWT_SECRET);
+  return c.json({ token });
 });
 
-app.post("/api/v1/user/signin", (c) => {
-  return c.text("Hello Hono!");
-});
 app.post("/api/v1/blog", (c) => {
   return c.text("Hello Hono!");
 });
