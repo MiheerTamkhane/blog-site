@@ -51,7 +51,7 @@ blogRoute.post("/", async (c) => {
   if (!post) {
     return c.json({ message: "Something went wrong." });
   }
-  return c.json(post);
+  return c.json({ post });
 });
 
 blogRoute.put("/", async (c) => {
@@ -73,7 +73,7 @@ blogRoute.put("/", async (c) => {
       published: body.published,
     },
   });
-  return c.json(updatedPost);
+  return c.json({ post: updatedPost });
 });
 
 blogRoute.get("/bulk", async (c) => {
@@ -85,7 +85,7 @@ blogRoute.get("/bulk", async (c) => {
 
   const posts = await prisma.post.findMany({});
 
-  return c.json(posts);
+  return c.json({ blogs: posts });
 });
 
 blogRoute.get("/:id", async (c) => {
@@ -104,5 +104,5 @@ blogRoute.get("/:id", async (c) => {
   if (!post) {
     return c.json({ message: "Post not found." });
   }
-  return c.json(post);
+  return c.json({ post });
 });
