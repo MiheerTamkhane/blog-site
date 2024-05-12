@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { verify } from "hono/jwt";
-
+import { createPostInput, updatePostInput } from "@photon-rex/blog-common";
 export const blogRoute = new Hono<{
   Bindings: {
     DATABASE_URL: string;
@@ -15,14 +15,12 @@ export const blogRoute = new Hono<{
 blogRoute.use("/*", async (c, next) => {
   // get the header
   const header = c.req.header("authorization") || "";
-  console.log(header);
   if (!header) {
     c.status(403);
     return c.json({ message: "User is Unauthorized!" });
   }
   const token = header.split(" ")[1];
   // verify the header
-  console.log("token ", token);
   const res = await verify(token, c.env.JWT_SECRET);
   if (!res.id) {
     // if the header is correct then proceed
@@ -37,13 +35,16 @@ blogRoute.use("/*", async (c, next) => {
 
 blogRoute.post("/", async (c) => {
   const userId = c.get("userId");
-  console.log({ userId });
   if (!userId) {
     return c.json({ message: "User is not authenticated." });
   }
   const prisma = c.get("prisma");
 
   const body = await c.req.json();
+  const { success } = createPostInput.safeParse(body);
+  if (!success) {
+    return c.json({ message: "Filled Data is not valid." });
+  }
   const post = await prisma.post.create({
     data: {
       title: body.title,
@@ -66,6 +67,10 @@ blogRoute.put("/", async (c) => {
   const prisma = c.get("prisma");
 
   const body = await c.req.json();
+  const { success } = updatePostInput.safeParse(body);
+  if (!success) {
+    return c.json({ message: "Filled Data is not valid." });
+  }
   const updatedPost = await prisma.post.update({
     where: {
       id: body.id,

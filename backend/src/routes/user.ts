@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { sign } from "hono/jwt";
-
+import { signinInput, signupInput } from "@photon-rex/blog-common";
 export const userRoute = new Hono<{
   Bindings: {
     DATABASE_URL: string;
@@ -14,6 +14,10 @@ export const userRoute = new Hono<{
 userRoute.post("/signup", async (c) => {
   const prisma = c.get("prisma");
   const body = await c.req.json();
+  const { success } = signupInput.safeParse(body);
+  if (!success) {
+    return c.json({ message: "Please check email/password." });
+  }
   try {
     const res = await prisma.user.findUnique({
       where: {
@@ -43,6 +47,10 @@ userRoute.post("/signup", async (c) => {
 userRoute.post("/signin", async (c) => {
   const prisma = c.get("prisma");
   const body = await c.req.json();
+  const { success } = signinInput.safeParse(body);
+  if (!success) {
+    return c.json({ message: "Please check email/password." });
+  }
   const user = await prisma.user.findUnique({
     where: {
       email: body.email,
