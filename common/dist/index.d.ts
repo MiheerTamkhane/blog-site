@@ -28,21 +28,18 @@ export declare const createPostInput: z.ZodObject<{
     title: z.ZodString;
     content: z.ZodString;
     published: z.ZodBoolean;
-    authorId: z.ZodString;
 }, "strip", z.ZodTypeAny, {
     title: string;
     content: string;
     published: boolean;
-    authorId: string;
 }, {
     title: string;
     content: string;
     published: boolean;
-    authorId: string;
 }>;
 export type CreatePostInput = z.infer<typeof createPostInput>;
 export declare const updatePostInput: z.ZodObject<{
-    id: z.ZodString;
+    id: z.ZodNumber;
     title: z.ZodString;
     content: z.ZodString;
     published: z.ZodBoolean;
@@ -50,11 +47,11 @@ export declare const updatePostInput: z.ZodObject<{
     title: string;
     content: string;
     published: boolean;
-    id: string;
+    id: number;
 }, {
     title: string;
     content: string;
     published: boolean;
-    id: string;
+    id: number;
 }>;
 export type UpdatePostInput = z.infer<typeof updatePostInput>;

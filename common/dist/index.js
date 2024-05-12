@@ -28,7 +28,7 @@ exports.createPostInput = zod_1.default.object({
 });
 // updatePostInput / UpdatePostInput
 exports.updatePostInput = zod_1.default.object({
-  idod: z_1.default.string(),
+  id: zod_1.default.number(),
   title: zod_1.default.string(),
   content: zod_1.default.string(),
   published: zod_1.default.boolean(),
