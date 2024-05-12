@@ -1,9 +1,24 @@
-import { Hono } from 'hono'
+import { Hono } from "hono";
+import { PrismaClient } from "@prisma/client/edge";
+import { withAccelerate } from "@prisma/extension-accelerate";
+import { userRoute } from "./routes/user";
+import { blogRoute } from "./routes/blog";
+const app = new Hono<{
+  Bindings: {
+    DATABASE_URL: string;
+    JWT_SECRET: string;
+  };
+}>();
 
-const app = new Hono()
+app.use("*", async (c, next) => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env?.DATABASE_URL,
+  }).$extends(withAccelerate());
 
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
+  c.set("prisma", prisma);
+  await next();
+});
 
-export default app
+app.route("/api/v1/user", userRoute);
+app.route("/api/v1/blog", blogRoute);
+export default app;
