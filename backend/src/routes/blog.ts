@@ -50,7 +50,7 @@ blogRoute.post("/", async (c) => {
       title: body.title,
       content: body.content,
       published: body.published,
-      authorId: userId,
+      authorId: Number(userId),
     },
   });
   if (!post) {
@@ -73,8 +73,8 @@ blogRoute.put("/", async (c) => {
   }
   const updatedPost = await prisma.post.update({
     where: {
-      id: body.id,
-      authorId: userId,
+      id: Number(body.id),
+      authorId: Number(userId),
     },
     data: {
       title: body.title,
