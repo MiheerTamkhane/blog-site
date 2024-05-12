@@ -6,6 +6,9 @@ export const userRoute = new Hono<{
     DATABASE_URL: string;
     JWT_SECRET: string;
   };
+  variables: {
+    prisma: any;
+  };
 }>();
 
 userRoute.post("/signup", async (c) => {

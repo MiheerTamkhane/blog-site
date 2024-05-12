@@ -6,6 +6,10 @@ export const blogRoute = new Hono<{
     DATABASE_URL: string;
     JWT_SECRET: string;
   };
+  variables: {
+    userId: string;
+    prisma: any;
+  };
 }>();
 
 blogRoute.use("/*", async (c, next) => {
