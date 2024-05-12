@@ -21,7 +21,6 @@ export const createPostInput = z.object({
   title: z.string(),
   content: z.string(),
   published: z.boolean(),
-  authorId: z.string(),
 });
 
 export type CreatePostInput = z.infer<typeof createPostInput>;
