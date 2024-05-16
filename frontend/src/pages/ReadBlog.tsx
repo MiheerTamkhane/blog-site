@@ -17,7 +17,15 @@ type BlogPost = {
 export const ReadBlog = () => {
   const navigate = useNavigate();
   const params = useParams();
-  const [blog, setBlog] = useState<BlogPost>({});
+  const [blog, setBlog] = useState<BlogPost>({
+    title: "",
+    id: 0,
+    content: "",
+    published: false,
+    author: {
+      name: "",
+    },
+  });
   const [loader, setLoader] = useState(true);
 
   useEffect(() => {

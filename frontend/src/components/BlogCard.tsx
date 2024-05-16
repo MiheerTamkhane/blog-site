@@ -1,15 +1,14 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 interface Blog {
   id: string;
   title: string;
   content: string;
-  published: boolean;
+  published?: boolean;
   author: string;
 }
 
-export const BlogCard = ({ id, title, content, published, author }: Blog) => {
+export const BlogCard = ({ id, title, content, author }: Blog) => {
   return (
     <div className="p-6 bg-white border-gray-100 border-b-2">
       <div className="flex gap-2 items-center mb-2">

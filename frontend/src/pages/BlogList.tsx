@@ -6,6 +6,16 @@ import { Loader } from "../components/Loader";
 import { BACKEND_URL } from "../config";
 import { useNavigate } from "react-router-dom";
 
+type BlogPost = {
+  title: string;
+  id: string;
+  content: string;
+  published: boolean;
+  author: {
+    name: string;
+  };
+};
+
 export const BlogList = () => {
   const [blogList, setBlogList] = useState([]);
   const [loader, setLoader] = useState(true);
@@ -37,7 +47,7 @@ export const BlogList = () => {
           <Loader />
         ) : (
           <div className="w-full flex justify-center flex-col">
-            {blogList?.map((blog) => (
+            {blogList?.map((blog: BlogPost) => (
               <BlogCard
                 key={blog?.id}
                 id={blog?.id}

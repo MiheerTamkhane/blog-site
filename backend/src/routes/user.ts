@@ -33,7 +33,7 @@ userRoute.post("/signup", async (c) => {
         },
       });
       const token = await sign({ id: user.id }, c.env.JWT_SECRET);
-      return c.json({ jwt: token });
+      return c.json({ token });
     }
     return c.json({
       message: "User with email already exists!",

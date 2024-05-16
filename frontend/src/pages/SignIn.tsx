@@ -30,6 +30,7 @@ export const SignIn = () => {
       setLoader(false);
     } catch (err) {
       console.error(err);
+      setLoader(false);
     }
   }
   return (
