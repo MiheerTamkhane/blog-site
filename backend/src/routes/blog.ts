@@ -120,6 +120,17 @@ blogRoute.get("/:id", async (c) => {
     where: {
       id,
     },
+    select: {
+      title: true,
+      id: true,
+      content: true,
+      published: true,
+      author: {
+        select: {
+          name: true,
+        },
+      },
+    },
   });
 
   if (!post) {

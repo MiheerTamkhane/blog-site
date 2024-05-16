@@ -4,10 +4,20 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { Loader } from "../components/Loader";
+
+type BlogPost = {
+  title: string;
+  id: number;
+  content: string;
+  published: boolean;
+  author: {
+    name: string;
+  };
+};
 export const ReadBlog = () => {
   const navigate = useNavigate();
   const params = useParams();
-  const [blog, setBlog] = useState({});
+  const [blog, setBlog] = useState<BlogPost>({});
   const [loader, setLoader] = useState(true);
 
   useEffect(() => {
@@ -46,10 +56,14 @@ export const ReadBlog = () => {
             <div className="w-4/12 hidden md:block">
               <div className="mb-4 border-b p-2">Author</div>
               <div className="flex gap-4 justify-start items-start">
-                <span className="border py-1 px-2.5 rounded-full">A</span>
+                <span className="border py-1 px-2.5 rounded-full">
+                  {blog?.author?.name?.[0]?.toUpperCase()}
+                </span>
                 <div>
-                  <h1>Author Name</h1>
-                  <p>Lorem ipsum dolor, sit amet consectetur adipisicing.</p>
+                  <h1 className="font-bold text-lg">{blog?.author?.name}</h1>
+                  <p>
+                    Bio. Lorem ipsum dolor, sit amet consectetur adipisicing.
+                  </p>
                 </div>
               </div>
             </div>
