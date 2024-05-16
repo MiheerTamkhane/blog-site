@@ -2,8 +2,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 // import "./App.css";
 import { SignUp } from "./pages/SignUp";
 import { SignIn } from "./pages/SignIn";
-import { Blog } from "./pages/Blog";
 import { BlogList } from "./pages/BlogList";
+import { WriteBlog } from "./pages/WriteBlog";
+import { ReadBlog } from "./pages/ReadBlog";
 import { PrivateRoutes } from "./routes/PrivateRoutes";
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
         <Route path="/signin" element={<SignIn />} />
         <Route element={<PrivateRoutes />}>
           <Route path="/blogs" element={<BlogList />} />
-          <Route path="/blogs/:id" element={<Blog />} />
+          <Route path="/blog/:id" element={<ReadBlog />} />
+          <Route path="/publish" element={<WriteBlog />} />
         </Route>
       </Routes>
     </BrowserRouter>
