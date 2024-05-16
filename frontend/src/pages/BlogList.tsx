@@ -1,24 +1,54 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { BlogCard } from "../components/BlogCard";
+import { Navbar } from "../components/Navbar";
+import { Loader } from "../components/Loader";
+import { BACKEND_URL } from "../config";
+import { useNavigate } from "react-router-dom";
+
 export const BlogList = () => {
+  const [blogList, setBlogList] = useState([]);
+  const [loader, setLoader] = useState(true);
+  const navigate = useNavigate();
+  useEffect(() => {
+    onLoad();
+  }, []);
+
+  async function onLoad() {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${BACKEND_URL}/api/v1/blog/bulk`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setBlogList(response.data.blogs);
+      setLoader(false);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   return (
-    <div className="w-full h-screen  flex justify-center items-center">
-      <div className="max-w-lg p-6 bg-white border-gray-200 rounded-lg shadow">
-        <Link to="#">
-          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-            Noteworthy technology acquisitions 2021
-          </h5>
-        </Link>
-        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-          Here are the biggest enterprise technology acquisitions of 2021 so
-          far, in reverse chronological order.
-        </p>
-        <Link
-          to="#"
-          className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        >
-          Read more
-        </Link>
+    <div>
+      <Navbar onClick={() => navigate("/publish")} />
+      <div className="max-w-screen-md h-fit my-10 flex justify-center mx-auto">
+        {loader ? (
+          <Loader />
+        ) : (
+          <div className="w-full flex justify-center flex-col">
+            {blogList?.map((blog) => (
+              <BlogCard
+                key={blog?.id}
+                id={blog?.id}
+                title={blog?.title}
+                content={blog?.content}
+                published={blog?.published}
+                author={blog?.author?.name}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
